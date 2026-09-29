@@ -1,31 +1,87 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+
+import {
+
+    getFirestore,
+
+    collection,
+
+    addDoc,
+
+    serverTimestamp
+
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+// FIREBASE CONFIG
+
+const firebaseConfig = {
+
+    apiKey: "AIzaSyAUENK-LXHg2H42irmSMrlzEgQK6mbrfmE",
+
+    authDomain: "jotters-dls-tournament.firebaseapp.com",
+
+    projectId: "jotters-dls-tournament",
+
+    storageBucket: "jotters-dls-tournament.firebasestorage.app",
+
+    messagingSenderId: "339718914725",
+
+    appId: "1:339718914725:web:c3343960eaaa899331034c",
+
+    measurementId: "G-LWEMY00YYC"
+
+};
+
+// INITIALIZE FIREBASE
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+// REGISTRATION FORM
+
 const form = document.getElementById("registrationForm");
 
-form.addEventListener("submit", function (event) {
+form.addEventListener("submit", async function (event) {
 
     event.preventDefault();
 
-    const playerName = form.playerName.value;
+    const playerName = form.playerName.value.trim();
 
-    const dlsId = form.dlsId.value;
+    const dlsId = form.dlsId.value.trim();
 
-    const teamName = form.teamName.value;
+    const teamName = form.teamName.value.trim();
 
-    const email = form.email.value;
+    const email = form.email.value.trim();
 
-    alert(
+    try {
 
-        "Registration received!\n\n" +
+        await addDoc(collection(db, "players"), {
 
-        "Player: " + playerName + "\n" +
+            playerName: playerName,
 
-        "DLS ID: " + dlsId + "\n" +
+            dlsId: dlsId,
 
-        "Team: " + teamName + "\n" +
+            teamName: teamName,
 
-        "Email: " + email
+            email: email,
 
-    );
+            status: "registered",
 
-    form.reset();
+            createdAt: serverTimestamp()
+
+        });
+
+        alert("Registration successful! 🏆");
+
+        form.reset();
+
+    } catch (error) {
+
+        console.error("Registration error:", error);
+
+        alert("Registration failed. Please try again.");
+
+    }
 
 });
