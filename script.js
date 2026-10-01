@@ -78,17 +78,19 @@ form.addEventListener("submit", async function (event) {
 
     } catch (error) {
 
-        console.error("Registration error:", error);
+    console.error("Registration error:", error);
 
-        if (error.code === "permission-denied") {
+    alert(
 
-            alert("This Gmail has already been registered.");
+        "ERROR CODE: " + error.code +
 
-        } else {
+        "\n\n" +
 
-            alert("Registration failed. Please try again.");
+        error.message
 
-        }
+    );
+
+}
 
     }
 
