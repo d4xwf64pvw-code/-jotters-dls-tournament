@@ -4,9 +4,9 @@ import {
 
     getFirestore,
 
-    collection,
+    doc,
 
-    addDoc,
+    setDoc,
 
     serverTimestamp
 
@@ -52,11 +52,11 @@ form.addEventListener("submit", async function (event) {
 
     const teamName = form.teamName.value.trim();
 
-    const email = form.email.value.trim();
+    const email = form.email.value.trim().toLowerCase();
 
     try {
 
-        await addDoc(collection(db, "players"), {
+        await setDoc(doc(db, "players", email), {
 
             playerName: playerName,
 
@@ -80,7 +80,15 @@ form.addEventListener("submit", async function (event) {
 
         console.error("Registration error:", error);
 
-        alert("Registration failed. Please try again.");
+        if (error.code === "permission-denied") {
+
+            alert("This Gmail has already been registered.");
+
+        } else {
+
+            alert("Registration failed. Please try again.");
+
+        }
 
     }
 
